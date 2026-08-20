@@ -9,14 +9,16 @@
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#1f2a24;
-    --bg-soft:#26332c;
-    --ink:#f5f1e8;
-    --ink-dim:#b9c2ba;
+    --bg:#fffdf9;
+    --bg-soft:#f4f1ff;
+    --ink:#221f2e;
+    --ink-dim:#68627a;
     --coral:#ff6b5b;
     --gold:#ffc857;
     --teal:#4ecdc4;
     --violet:#a78bec;
+    --sky:#57b8ff;
+    --prism: linear-gradient(90deg, var(--coral), var(--gold), var(--teal), var(--sky), var(--violet));
     --radius:22px;
   }
   *{ box-sizing:border-box; }
@@ -30,35 +32,61 @@
   h1,h2,h3,.display{ font-family:'Baloo 2', sans-serif; }
   .wrap{ max-width:980px; margin:0 auto; padding:0 24px; }
 
+  /* ---------- Name gate ---------- */
+  .name-gate{ position:fixed; inset:0; background:rgba(30,20,45,.55); backdrop-filter:blur(4px); display:flex; align-items:center; justify-content:center; z-index:1000; padding:24px; }
+  .name-gate.hidden{ display:none; }
+  .name-gate-card{ background:#ffffff; border-radius:28px; padding:40px 32px; text-align:center; max-width:360px; width:100%; box-shadow:0 20px 50px rgba(30,20,45,.25); animation:gate-pop .35s cubic-bezier(.34,1.56,.64,1); }
+  @keyframes gate-pop{ from{ transform:scale(.85); opacity:0; } to{ transform:scale(1); opacity:1; } }
+  .name-gate-emoji{ font-size:40px; margin:0 0 6px; }
+  .name-gate-title{ font-family:'Baloo 2',sans-serif; font-size:22px; font-weight:800; margin:0 0 20px; color:var(--ink); }
+  #gate-name-input{
+    font-family:'Nunito',sans-serif; font-size:17px; font-weight:700; padding:13px 18px; width:100%;
+    border-radius:999px; border:2px solid var(--bg-soft); background:var(--bg-soft); color:var(--ink);
+    outline:none; text-align:center; margin-bottom:18px;
+  }
+  #gate-name-input:focus-visible{ outline:3px solid var(--teal); outline-offset:2px; }
+  .gate-start-btn{
+    background:var(--prism); color:#fff; font-family:'Nunito'; font-weight:800; font-size:16px;
+    padding:13px 30px; border-radius:999px; border:none; cursor:pointer;
+    box-shadow:0 4px 0 rgba(0,0,0,.2); transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .gate-start-btn:hover{ transform:translateY(-2px); }
+  .gate-start-btn:active{ transform:translateY(2px); box-shadow:0 1px 0 rgba(0,0,0,.2); }
+  .gate-start-btn:focus-visible{ outline:3px solid var(--teal); outline-offset:3px; }
+
   /* ---------- Hero ---------- */
   .hero{ position:relative; overflow:hidden; text-align:center; padding:56px 24px 76px; }
-  .hero-glyph{ position:absolute; top:-60px; right:-60px; width:340px; height:340px; opacity:.07; transform:rotate(12deg); pointer-events:none; }
+  .hero-content{ position:relative; z-index:1; }
+  .prism-blob{ position:absolute; border-radius:50%; filter:blur(50px); opacity:.35; pointer-events:none; z-index:0; }
+  .prism-blob--1{ width:220px; height:220px; background:var(--coral); top:-60px; left:-60px; }
+  .prism-blob--2{ width:260px; height:260px; background:var(--teal); top:20px; right:-80px; }
+  .prism-blob--3{ width:200px; height:200px; background:var(--gold); bottom:-90px; left:38%; }
   .badge-mark{ font-size:44px; display:inline-block; margin-bottom:6px; }
-  .eyebrow{ text-transform:uppercase; letter-spacing:.16em; font-size:13px; color:var(--gold); font-weight:700; margin:0 0 10px; }
-  h1.display{ font-size:clamp(30px,6vw,50px); margin:0 0 16px; font-weight:800; }
-  h1.display .child-name{ color:var(--coral); }
-  .hero p.lead{ font-size:17px; color:var(--ink-dim); max-width:580px; margin:0 auto 30px; }
-  .name-row{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-bottom:30px; }
-  #child-name-input{
-    font-family:'Nunito',sans-serif; font-size:16px; font-weight:700; padding:12px 20px;
-    border-radius:999px; border:2px solid var(--gold); background:var(--bg-soft); color:var(--ink);
-    outline:none; min-width:230px; text-align:center;
+  .eyebrow{ text-transform:uppercase; letter-spacing:.16em; font-size:13px; color:var(--violet); font-weight:800; margin:0 0 10px; }
+  h1.display{
+    font-size:clamp(34px,7vw,58px); margin:0 0 8px; font-weight:800;
+    background:var(--prism); -webkit-background-clip:text; background-clip:text;
+    -webkit-text-fill-color:transparent; color:transparent;
   }
-  #child-name-input:focus-visible{ outline:3px solid var(--teal); outline-offset:2px; }
-  .skills-list{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; font-size:13px; color:var(--ink-dim); }
+  .greeting{ font-size:clamp(19px,4vw,26px); font-weight:700; margin:0 0 16px; color:var(--ink); }
+  .greeting .child-name{ color:var(--coral); }
+  .hero p.lead{ font-size:16.5px; color:var(--ink-dim); max-width:580px; margin:0 auto 30px; }
+  .skills-list{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; font-size:13px; }
   .skill-tag{
     font-family:'Nunito',sans-serif; background:var(--bg-soft); color:var(--ink-dim); border:2px solid transparent;
     padding:7px 14px; border-radius:999px; font-size:13px; font-weight:700; cursor:pointer;
-    transition:transform .15s ease, background .15s ease, color .15s ease;
+    box-shadow:0 2px 0 rgba(0,0,0,.06);
+    transition:transform .15s ease, background .15s ease, color .15s ease, box-shadow .15s ease;
   }
   .skill-tag:hover{ transform:translateY(-2px); }
+  .skill-tag:active{ transform:translateY(1px); box-shadow:none; }
   .skill-tag:focus-visible{ outline:3px solid var(--teal); outline-offset:2px; }
   .skill-tag.active.skill-tag--logical{ background:var(--coral); color:#1c1c1c; border-color:var(--coral); }
   .skill-tag.active.skill-tag--computational{ background:var(--gold); color:#1c1c1c; border-color:var(--gold); }
   .skill-tag.active.skill-tag--problem{ background:var(--teal); color:#1c1c1c; border-color:var(--teal); }
   .skill-tag.active.skill-tag--analytical{ background:var(--violet); color:#1c1c1c; border-color:var(--violet); }
-  .filter-hint{ font-size:12px; color:var(--ink-dim); opacity:.65; margin:12px 0 0; }
-  .card.card-hidden{ display:none; }
+  .skill-tag.active.skill-tag--math{ background:var(--sky); color:#1c1c1c; border-color:var(--sky); }
+  .filter-hint{ font-size:12px; color:var(--ink-dim); opacity:.8; margin:12px 0 0; }
 
   /* ---------- Cards ---------- */
   main.cards-grid{
@@ -67,7 +95,14 @@
   }
   @media (max-width:680px){ main.cards-grid{ grid-template-columns:1fr; gap:56px 0; } }
 
-  .card{ position:relative; border-radius:var(--radius); padding:34px 26px 30px; color:#1c1c1c; }
+  .card{
+    position:relative; border-radius:var(--radius); padding:34px 26px 30px; color:#1c1c1c;
+    box-shadow:0 6px 16px rgba(40,20,60,.08);
+    transition:transform .2s cubic-bezier(.34,1.56,.64,1), box-shadow .2s ease;
+  }
+  .card:hover{ transform:translateY(-4px); box-shadow:0 14px 28px rgba(40,20,60,.14); }
+  .card:nth-child(5):last-child{ grid-column:1 / -1; max-width:480px; margin:0 auto; }
+  .card.card-hidden{ display:none; }
   .card::before{
     content:''; position:absolute; top:-16px; left:36px; width:34px; height:34px;
     border-radius:50%; background-color:inherit;
@@ -76,6 +111,7 @@
   .card--gold{ background-color:var(--gold); }
   .card--teal{ background-color:var(--teal); }
   .card--violet{ background-color:var(--violet); }
+  .card--sky{ background-color:var(--sky); }
 
   .card .icon{ font-size:32px; display:block; margin-bottom:8px; }
   .card h2{ font-size:21px; margin:0 0 8px; font-weight:700; }
@@ -85,17 +121,21 @@
   .quiz-question{ font-size:15.5px; font-weight:800; margin:2px 0 14px; line-height:1.45; }
   .pattern-row{ font-size:32px; letter-spacing:6px; margin-bottom:4px; }
 
+  .quiz-active.hidden{ display:none; }
+
   .choices{ display:flex; gap:10px; flex-wrap:wrap; }
   .choice-btn{
     font-family:'Nunito',sans-serif; font-size:17px; font-weight:700; padding:10px 16px;
     border-radius:14px; border:2px solid rgba(0,0,0,.15); background:rgba(255,255,255,.55);
-    cursor:pointer; transition:transform .15s ease, background .15s ease;
+    cursor:pointer; box-shadow:0 3px 0 rgba(0,0,0,.12);
+    transition:transform .15s ease, background .15s ease, box-shadow .15s ease;
   }
   .choice-btn:hover{ transform:translateY(-2px); background:rgba(255,255,255,.85); }
+  .choice-btn:active{ transform:translateY(1px); box-shadow:0 1px 0 rgba(0,0,0,.12); }
   .choice-btn:focus-visible{ outline:3px solid #1c1c1c; outline-offset:2px; }
   .choice-btn.correct{ background:#fff; border-color:#1c8a4a; }
   .choice-btn.wrong{ background:#fff; border-color:#a13a26; animation:shake .35s ease; }
-  .choice-btn:disabled{ cursor:default; opacity:.7; }
+  .choice-btn:disabled{ cursor:default; opacity:.7; box-shadow:none; }
   @keyframes shake{
     10%,90%{ transform:translateX(-2px); } 20%,80%{ transform:translateX(3px); }
     30%,50%,70%{ transform:translateX(-5px); } 40%,60%{ transform:translateX(5px); }
@@ -103,8 +143,19 @@
 
   .btn{ font-family:'Nunito'; font-weight:800; font-size:13.5px; padding:10px 18px; border-radius:999px; border:none; cursor:pointer; }
   .btn:focus-visible{ outline:3px solid #1c1c1c; outline-offset:2px; }
-  .btn-primary{ background:#1c1c1c; color:#fff; }
+  .btn-primary{
+    background:#1c1c1c; color:#fff; box-shadow:0 3px 0 rgba(0,0,0,.35);
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .btn-primary:hover{ transform:translateY(-2px); }
+  .btn-primary:active{ transform:translateY(1px); box-shadow:0 1px 0 rgba(0,0,0,.35); }
   .next-btn{ margin-top:16px; }
+
+  .round-complete{ text-align:center; padding:6px 0 2px; }
+  .round-complete.hidden{ display:none; }
+  .round-complete-score{ font-size:16px; font-weight:800; margin:0 0 4px; }
+  .final-score{ font-size:24px; }
+  .round-complete-msg{ font-size:14px; font-weight:700; opacity:.85; margin:0 0 16px; }
 
   .chart{ display:flex; align-items:flex-end; gap:14px; height:120px; margin-bottom:14px; padding:0 2px; }
   .bar-col{ display:flex; flex-direction:column; align-items:center; gap:6px; flex:1; }
@@ -135,24 +186,34 @@
 </head>
 <body>
 
+  <div id="name-gate" class="name-gate">
+    <div class="name-gate-card">
+      <p class="name-gate-emoji">🧩✨</p>
+      <p class="name-gate-title">Please enter your name</p>
+      <input id="gate-name-input" type="text" placeholder="Your name" maxlength="24" autofocus>
+      <button id="gate-start-btn" class="gate-start-btn" type="button">Let's start! 🚀</button>
+    </div>
+  </div>
+
   <section class="hero">
-    <svg class="hero-glyph" viewBox="0 0 100 100" aria-hidden="true">
-      <path fill="#f5f1e8" d="M35 10h20v8a7 7 0 0 0 14 0v-8h20v20h-8a7 7 0 0 0 0 14h8v20H79a7 7 0 0 0 -14 0v10H45v-10a7 7 0 0 0 -14 0v10H10V64h8a7 7 0 0 0 0-14h-8V30h11a7 7 0 0 0 14 0z"/>
-    </svg>
-    <span class="badge-mark">🧩</span>
-    <p class="eyebrow">Akky's Thinkers Club</p>
-    <h1 class="display">Congratulations, <span class="child-name">Akky</span>!<br>You've been selected 🎉</h1>
-    <p class="lead">You've been picked to join Puzzle Lab — a free space to build logical reasoning, computational thinking, problem solving, and analytical thinking, with 100+ questions in every skill.</p>
-    <div class="name-row">
-      <input id="child-name-input" type="text" value="Akky" maxlength="24">
+    <div class="prism-blob prism-blob--1" aria-hidden="true"></div>
+    <div class="prism-blob prism-blob--2" aria-hidden="true"></div>
+    <div class="prism-blob prism-blob--3" aria-hidden="true"></div>
+    <div class="hero-content">
+      <span class="badge-mark">🧩</span>
+      <p class="eyebrow">Akky's Thinkers Club</p>
+      <h1 class="display">Puzzle Lab</h1>
+      <p class="greeting">Hi <span class="child-name">Champion</span>! Let's play with your brain today. 🎉</p>
+      <p class="lead">A free space to build logical reasoning, computational thinking, problem solving, analytical thinking, and math — with 100+ questions and a mix of easy, moderate, and hard levels in every skill.</p>
+      <div class="skills-list">
+        <button type="button" class="skill-tag skill-tag--logical" data-jump="logical">🔺 Logical Reasoning</button>
+        <button type="button" class="skill-tag skill-tag--computational" data-jump="computational">💻 Computational Thinking</button>
+        <button type="button" class="skill-tag skill-tag--problem" data-jump="problem">🧠 Problem Solving</button>
+        <button type="button" class="skill-tag skill-tag--analytical" data-jump="analytical">📊 Analytical Thinking</button>
+        <button type="button" class="skill-tag skill-tag--math" data-jump="math">🔢 Math Skills</button>
+      </div>
+      <p class="filter-hint">Tap a skill to jump straight to it — tap it again to see all five.</p>
     </div>
-    <div class="skills-list">
-      <button type="button" class="skill-tag skill-tag--logical" data-jump="logical">🔺 Logical Reasoning</button>
-      <button type="button" class="skill-tag skill-tag--computational" data-jump="computational">💻 Computational Thinking</button>
-      <button type="button" class="skill-tag skill-tag--problem" data-jump="problem">🧠 Problem Solving</button>
-      <button type="button" class="skill-tag skill-tag--analytical" data-jump="analytical">📊 Analytical Thinking</button>
-    </div>
-    <p class="filter-hint">Tap a skill to jump straight to it — tap it again to see all four.</p>
   </section>
 
   <main class="cards-grid">
@@ -160,66 +221,114 @@
     <div class="card card--coral" data-skill="logical">
       <span class="icon">🔺</span>
       <h2>Logical Reasoning</h2>
-      <p class="desc">Spotting patterns and figuring out what comes next. 100+ questions to practice.</p>
-      <p class="quiz-meta">Score: <span class="score">0</span> correct &middot; <span class="badge-note">Get 10 correct to earn your badge</span></p>
-      <div class="quiz-display"></div>
-      <p class="quiz-question"></p>
-      <div class="choices"></div>
-      <p class="feedback"></p>
-      <button class="btn btn-primary next-btn hidden">Next question &rarr;</button>
+      <p class="desc">Spotting patterns and figuring out what comes next.</p>
+      <p class="quiz-meta"><span class="round-label">Question 1 of 10</span> &middot; Score: <span class="score">0</span> &middot; <span class="badge-note">Finish the round to earn your badge</span></p>
+      <div class="quiz-active">
+        <div class="quiz-display"></div>
+        <p class="quiz-question"></p>
+        <div class="choices"></div>
+        <p class="feedback"></p>
+        <button class="btn btn-primary next-btn hidden">Next question &rarr;</button>
+      </div>
+      <div class="round-complete hidden">
+        <p class="round-complete-score">You got <span class="final-score">0</span> out of 10!</p>
+        <p class="round-complete-msg"></p>
+        <button class="btn btn-primary play-again-btn">Play again 🔄</button>
+      </div>
     </div>
 
     <div class="card card--gold" data-skill="computational">
       <span class="icon">💻</span>
       <h2>Computational Thinking</h2>
-      <p class="desc">Breaking a job into small, ordered steps. 100+ questions to practice.</p>
-      <p class="quiz-meta">Score: <span class="score">0</span> correct &middot; <span class="badge-note">Get 10 correct to earn your badge</span></p>
-      <div class="quiz-display"></div>
-      <p class="quiz-question"></p>
-      <div class="choices"></div>
-      <p class="feedback"></p>
-      <button class="btn btn-primary next-btn hidden">Next question &rarr;</button>
+      <p class="desc">Breaking a job into small, ordered steps.</p>
+      <p class="quiz-meta"><span class="round-label">Question 1 of 10</span> &middot; Score: <span class="score">0</span> &middot; <span class="badge-note">Finish the round to earn your badge</span></p>
+      <div class="quiz-active">
+        <div class="quiz-display"></div>
+        <p class="quiz-question"></p>
+        <div class="choices"></div>
+        <p class="feedback"></p>
+        <button class="btn btn-primary next-btn hidden">Next question &rarr;</button>
+      </div>
+      <div class="round-complete hidden">
+        <p class="round-complete-score">You got <span class="final-score">0</span> out of 10!</p>
+        <p class="round-complete-msg"></p>
+        <button class="btn btn-primary play-again-btn">Play again 🔄</button>
+      </div>
     </div>
 
     <div class="card card--teal" data-skill="problem">
       <span class="icon">🧠</span>
       <h2>Problem Solving</h2>
-      <p class="desc">Reading carefully and thinking a puzzle through. 100+ questions to practice.</p>
-      <p class="quiz-meta">Score: <span class="score">0</span> correct &middot; <span class="badge-note">Get 10 correct to earn your badge</span></p>
-      <div class="quiz-display"></div>
-      <p class="quiz-question"></p>
-      <div class="choices"></div>
-      <p class="feedback"></p>
-      <button class="btn btn-primary next-btn hidden">Next question &rarr;</button>
+      <p class="desc">Reading carefully and thinking a puzzle through.</p>
+      <p class="quiz-meta"><span class="round-label">Question 1 of 10</span> &middot; Score: <span class="score">0</span> &middot; <span class="badge-note">Finish the round to earn your badge</span></p>
+      <div class="quiz-active">
+        <div class="quiz-display"></div>
+        <p class="quiz-question"></p>
+        <div class="choices"></div>
+        <p class="feedback"></p>
+        <button class="btn btn-primary next-btn hidden">Next question &rarr;</button>
+      </div>
+      <div class="round-complete hidden">
+        <p class="round-complete-score">You got <span class="final-score">0</span> out of 10!</p>
+        <p class="round-complete-msg"></p>
+        <button class="btn btn-primary play-again-btn">Play again 🔄</button>
+      </div>
     </div>
 
     <div class="card card--violet" data-skill="analytical">
       <span class="icon">📊</span>
       <h2>Analytical Thinking</h2>
-      <p class="desc">Reading data closely and comparing what you see. 100+ questions to practice.</p>
-      <p class="quiz-meta">Score: <span class="score">0</span> correct &middot; <span class="badge-note">Get 10 correct to earn your badge</span></p>
-      <div class="quiz-display"></div>
-      <p class="quiz-question"></p>
-      <div class="choices"></div>
-      <p class="feedback"></p>
-      <button class="btn btn-primary next-btn hidden">Next question &rarr;</button>
+      <p class="desc">Reading data closely and comparing what you see.</p>
+      <p class="quiz-meta"><span class="round-label">Question 1 of 10</span> &middot; Score: <span class="score">0</span> &middot; <span class="badge-note">Finish the round to earn your badge</span></p>
+      <div class="quiz-active">
+        <div class="quiz-display"></div>
+        <p class="quiz-question"></p>
+        <div class="choices"></div>
+        <p class="feedback"></p>
+        <button class="btn btn-primary next-btn hidden">Next question &rarr;</button>
+      </div>
+      <div class="round-complete hidden">
+        <p class="round-complete-score">You got <span class="final-score">0</span> out of 10!</p>
+        <p class="round-complete-msg"></p>
+        <button class="btn btn-primary play-again-btn">Play again 🔄</button>
+      </div>
+    </div>
+
+    <div class="card card--sky" data-skill="math">
+      <span class="icon">🔢</span>
+      <h2>Math Skills</h2>
+      <p class="desc">Addition, subtraction, multiplication, and division.</p>
+      <p class="quiz-meta"><span class="round-label">Question 1 of 10</span> &middot; Score: <span class="score">0</span> &middot; <span class="badge-note">Finish the round to earn your badge</span></p>
+      <div class="quiz-active">
+        <div class="quiz-display"></div>
+        <p class="quiz-question"></p>
+        <div class="choices"></div>
+        <p class="feedback"></p>
+        <button class="btn btn-primary next-btn hidden">Next question &rarr;</button>
+      </div>
+      <div class="round-complete hidden">
+        <p class="round-complete-score">You got <span class="final-score">0</span> out of 10!</p>
+        <p class="round-complete-msg"></p>
+        <button class="btn btn-primary play-again-btn">Play again 🔄</button>
+      </div>
     </div>
 
   </main>
 
   <section class="progress">
-    <h2>🏆 Badges earned: <span id="badge-count">0</span> / 4</h2>
+    <h2>🏆 Badges earned: <span id="badge-count">0</span> / 5</h2>
     <div class="badges-row">
       <span class="badge-icon" data-skill="logical">🔺</span>
       <span class="badge-icon" data-skill="computational">💻</span>
       <span class="badge-icon" data-skill="problem">🧠</span>
       <span class="badge-icon" data-skill="analytical">📊</span>
+      <span class="badge-icon" data-skill="math">🔢</span>
     </div>
-    <div id="congrats-banner" class="hidden">🌟 All four badges earned, <span class="child-name">Akky</span>! You're thinking like a true member of Akky's Thinkers Club.</div>
+    <div id="congrats-banner" class="hidden">🌟 All five badges earned, <span class="child-name">Champion</span>! You're thinking like a true member of Akky's Thinkers Club.</div>
   </section>
 
   <footer>
-    Made for <span class="child-name">Akky</span> — keep practicing a little every day. Big thinking starts small. 🧩
+    Made for <span class="child-name">Champion</span> — keep practicing a little every day. Big thinking starts small. 🧩
   </footer>
 
 <script>
@@ -270,6 +379,7 @@
       var options = shuffle(set.slice());
       var correct = set[3];
       qs.push({
+        difficulty: "moderate",
         displayHTML: '<div class="pattern-row" style="font-size:28px;">' + set.join(" &nbsp; ") + '</div>',
         questionText: "Which one does not belong?",
         options: options,
@@ -286,6 +396,7 @@
         var distractors = shuffle(pool).slice(0,3);
         var options = shuffle([b].concat(distractors));
         qs.push({
+          difficulty: "easy",
           displayHTML: '<div class="pattern-row">' + [a,b,a,b,a].join(" ") + " ❓</div>",
           questionText: "What comes next in the pattern?",
           options: options,
@@ -303,6 +414,7 @@
         var correct = start + step*5;
         var options = makeOptions(correct, [correct+step, correct-step, correct+step*2]).map(String);
         qs.push({
+          difficulty: "hard",
           displayHTML: '<div class="pattern-row" style="font-size:23px;">' + seq.join(", ") + ", ❓</div>",
           questionText: "What number comes next?",
           options: options,
@@ -352,6 +464,7 @@
         "A. " + steps[0] + "<br>B. " + steps[1] + "<br>C. " + steps[2] + "<br>D. " + steps[3] +
         "</div>";
       qs.push({
+        difficulty: "easy",
         displayHTML: display,
         questionText: "What is the correct order to do this?",
         options: options,
@@ -367,6 +480,7 @@
         var wrong3 = dx + " Right, " + dy + " Down";
         var options = shuffle([correct, wrong1, wrong2, wrong3]);
         qs.push({
+          difficulty: (dx+dy <= 8) ? "moderate" : "hard",
           displayHTML: '<div class="pattern-row" style="font-size:15px; letter-spacing:0;">🤖 A robot must move <strong>' + dx + "</strong> steps right and <strong>" + dy + "</strong> steps up to reach the star ⭐.</div>",
           questionText: "Which instructions get it there directly?",
           options: options,
@@ -400,6 +514,7 @@
     riddles.forEach(function(r){
       var options = shuffle(r.opts.slice());
       qs.push({
+        difficulty: "hard",
         displayHTML: "",
         questionText: r.q,
         options: options,
@@ -417,6 +532,7 @@
         var correct = a+b;
         var options = makeOptions(correct, [a, b, correct+2]).map(String);
         qs.push({
+          difficulty: "easy",
           displayHTML: "",
           questionText: name + " has " + a + " " + obj + " and finds " + b + " more. How many " + obj + " does " + name + " have now?",
           options: options,
@@ -432,6 +548,7 @@
         var correct2 = a2-b2;
         var options2 = makeOptions(correct2, [a2, b2, correct2+2]).map(String);
         qs.push({
+          difficulty: "moderate",
           displayHTML: "",
           questionText: name2 + " has " + a2 + " " + obj2 + " and gives away " + b2 + ". How many " + obj2 + " does " + name2 + " have left?",
           options: options2,
@@ -467,17 +584,19 @@
             return '<div class="bar-col"><div class="bar-wrap"><div class="bar" style="height:' + barHeights[idx] + 'px"></div></div><span class="bar-label">' + n + '</span><span class="bar-value">' + vals[idx] + '</span></div>';
           }).join("") + "</div>";
 
-          var questionText, options, correct;
+          var questionText, options, correct, difficulty;
           if(qtype === "most"){
             var maxIdx = vals.indexOf(Math.max.apply(null, vals));
             questionText = "Who " + theme.verb + " the most " + theme.obj + "?";
             correct = names4[maxIdx];
             options = shuffle(names4.slice());
+            difficulty = "easy";
           } else if(qtype === "fewest"){
             var minIdx = vals.indexOf(Math.min.apply(null, vals));
             questionText = "Who " + theme.verb + " the fewest " + theme.obj + "?";
             correct = names4[minIdx];
             options = shuffle(names4.slice());
+            difficulty = "easy";
           } else if(qtype === "difference"){
             var maxIdx2 = vals.indexOf(Math.max.apply(null, vals));
             var minIdx2 = vals.indexOf(Math.min.apply(null, vals));
@@ -485,14 +604,17 @@
             questionText = "How many more " + theme.obj + " did " + names4[maxIdx2] + " have than " + names4[minIdx2] + "?";
             correct = String(diff);
             options = makeOptions(diff, [diff+1, diff-1, vals[maxIdx2]]).map(String);
+            difficulty = "hard";
           } else {
             var sum = vals[0] + vals[1];
             questionText = "How many " + theme.obj + " did " + names4[0] + " and " + names4[1] + " have together?";
             correct = String(sum);
             options = makeOptions(sum, [sum+2, sum-2, vals[0]*vals[1]]).map(String);
+            difficulty = "moderate";
           }
 
           qs.push({
+            difficulty: difficulty,
             displayHTML: chartHTML,
             questionText: questionText,
             options: options,
@@ -505,53 +627,162 @@
     return qs;
   }
 
-  // ---------- Quiz engine ----------
-  var banks = {
+  // ---------- Math Skills ----------
+  function generateMath(){
+    var qs = [];
+
+    for(var a=1; a<=10; a++){
+      for(var b=1; b<=9; b++){
+        var correct = a+b;
+        var options = makeOptions(correct, [a, b, correct+2]).map(String);
+        qs.push({
+          difficulty: "easy",
+          displayHTML: '<div class="pattern-row" style="font-size:30px;">' + a + " + " + b + " = ❓</div>",
+          questionText: "What's the sum?",
+          options: options,
+          correctIndex: options.indexOf(String(correct))
+        });
+      }
+    }
+
+    for(var a2=10; a2<=19; a2++){
+      for(var b2=1; b2<=9; b2++){
+        var correct2 = a2-b2;
+        var options2 = makeOptions(correct2, [a2, b2, correct2+2]).map(String);
+        qs.push({
+          difficulty: "moderate",
+          displayHTML: '<div class="pattern-row" style="font-size:30px;">' + a2 + " - " + b2 + " = ❓</div>",
+          questionText: "What's the difference?",
+          options: options2,
+          correctIndex: options2.indexOf(String(correct2))
+        });
+      }
+    }
+
+    for(var a3=1; a3<=9; a3++){
+      for(var b3=1; b3<=9; b3++){
+        var correct3 = a3*b3;
+        var options3 = makeOptions(correct3, [a3+b3, correct3+a3, correct3-a3]).map(String);
+        qs.push({
+          difficulty: "hard",
+          displayHTML: '<div class="pattern-row" style="font-size:30px;">' + a3 + " &times; " + b3 + " = ❓</div>",
+          questionText: "What's the product?",
+          options: options3,
+          correctIndex: options3.indexOf(String(correct3))
+        });
+      }
+    }
+
+    for(var d=1; d<=9; d++){
+      for(var q=1; q<=9; q++){
+        var dividend = d*q;
+        var options4 = makeOptions(q, [q+1, q-1, d]).map(String);
+        qs.push({
+          difficulty: "hard",
+          displayHTML: '<div class="pattern-row" style="font-size:30px;">' + dividend + " &divide; " + d + " = ❓</div>",
+          questionText: "What's the quotient?",
+          options: options4,
+          correctIndex: options4.indexOf(String(q))
+        });
+      }
+    }
+
+    return qs;
+  }
+
+  // ---------- Round engine (easy -> moderate -> hard, 10 questions per round) ----------
+  var SKILLS = ["logical","computational","problem","analytical","math"];
+  var DIFFICULTY_SEQUENCE = ["easy","easy","easy","moderate","moderate","moderate","hard","hard","hard","hard"];
+
+  var allBanks = {
     logical: shuffle(generateLogical()),
     computational: shuffle(generateComputational()),
     problem: shuffle(generateProblem()),
-    analytical: shuffle(generateAnalytical())
+    analytical: shuffle(generateAnalytical()),
+    math: shuffle(generateMath())
   };
-  var pointer = { logical:0, computational:0, problem:0, analytical:0 };
-  var scores = { logical:0, computational:0, problem:0, analytical:0 };
-  var badgeEarned = { logical:false, computational:false, problem:false, analytical:false };
-  var BADGE_THRESHOLD = 10;
+
+  var pools = {};
+  var poolPtr = {};
+  var roundPos = {};
+  var roundScore = {};
+  var roundsCompleted = {};
+  var badgeEarned = {};
+  var currentQ = {};
+
+  SKILLS.forEach(function(skill){
+    var bank = allBanks[skill];
+    pools[skill] = {
+      easy: bank.filter(function(q){ return q.difficulty === "easy"; }),
+      moderate: bank.filter(function(q){ return q.difficulty === "moderate"; }),
+      hard: bank.filter(function(q){ return q.difficulty === "hard"; })
+    };
+    poolPtr[skill] = { easy:0, moderate:0, hard:0 };
+    roundPos[skill] = 0;
+    roundScore[skill] = 0;
+    roundsCompleted[skill] = 0;
+    badgeEarned[skill] = false;
+  });
+
+  function nextFromPool(skill, difficulty){
+    var pool = pools[skill][difficulty];
+    var i = poolPtr[skill][difficulty] % pool.length;
+    poolPtr[skill][difficulty] = i + 1;
+    return pool[i];
+  }
 
   function cardEls(skill){
     var card = document.querySelector('.card[data-skill="' + skill + '"]');
     return {
       card: card,
-      display: card.querySelector('.quiz-display'),
-      question: card.querySelector('.quiz-question'),
-      choices: card.querySelector('.choices'),
-      feedback: card.querySelector('.feedback'),
-      nextBtn: card.querySelector('.next-btn'),
-      scoreEl: card.querySelector('.score'),
-      badgeNote: card.querySelector('.badge-note')
+      quizActive: card.querySelector(".quiz-active"),
+      display: card.querySelector(".quiz-display"),
+      question: card.querySelector(".quiz-question"),
+      choices: card.querySelector(".choices"),
+      feedback: card.querySelector(".feedback"),
+      nextBtn: card.querySelector(".next-btn"),
+      scoreEl: card.querySelector(".score"),
+      roundLabel: card.querySelector(".round-label"),
+      badgeNote: card.querySelector(".badge-note"),
+      roundComplete: card.querySelector(".round-complete"),
+      finalScore: card.querySelector(".final-score"),
+      roundMsg: card.querySelector(".round-complete-msg"),
+      playAgainBtn: card.querySelector(".play-again-btn")
     };
   }
 
-  function loadQuestion(skill){
+  function capitalize(word){
+    return word.charAt(0).toUpperCase() + word.slice(1);
+  }
+
+  function loadRoundQuestion(skill){
     var els = cardEls(skill);
-    var bank = banks[skill];
-    var q = bank[pointer[skill] % bank.length];
+    var difficulty = DIFFICULTY_SEQUENCE[roundPos[skill]];
+    var q = nextFromPool(skill, difficulty);
+    currentQ[skill] = q;
+
     els.display.innerHTML = q.displayHTML || "";
     els.question.textContent = q.questionText;
     els.choices.innerHTML = "";
     els.feedback.textContent = "";
     els.feedback.className = "feedback";
     els.nextBtn.classList.add("hidden");
+    els.nextBtn.textContent = (roundPos[skill] === 9) ? "See my marks 🎉" : "Next question →";
+    els.roundLabel.textContent = "Question " + (roundPos[skill] + 1) + " of 10 · " + capitalize(difficulty);
+    els.scoreEl.textContent = roundScore[skill];
+
     q.options.forEach(function(optText, idx){
       var btn = document.createElement("button");
       btn.className = "choice-btn";
       btn.textContent = optText;
-      btn.addEventListener("click", function(){ handleAnswer(skill, idx, q); });
+      btn.addEventListener("click", function(){ handleAnswer(skill, idx); });
       els.choices.appendChild(btn);
     });
   }
 
-  function handleAnswer(skill, idx, q){
+  function handleAnswer(skill, idx){
     var els = cardEls(skill);
+    var q = currentQ[skill];
     var buttons = els.choices.querySelectorAll(".choice-btn");
     buttons.forEach(function(b, i){
       b.disabled = true;
@@ -559,22 +790,33 @@
       else if(i === idx) b.classList.add("wrong");
     });
     if(idx === q.correctIndex){
-      scores[skill]++;
+      roundScore[skill]++;
       els.feedback.textContent = "Nice! That's correct.";
       els.feedback.className = "feedback good";
     } else {
       els.feedback.textContent = "Not quite - the highlighted one was correct.";
       els.feedback.className = "feedback bad";
     }
-    els.scoreEl.textContent = scores[skill];
-    updateBadge(skill);
+    els.scoreEl.textContent = roundScore[skill];
     els.nextBtn.classList.remove("hidden");
   }
 
-  function updateBadge(skill){
-    if(!badgeEarned[skill] && scores[skill] >= BADGE_THRESHOLD){
+  function finishRound(skill){
+    var els = cardEls(skill);
+    roundsCompleted[skill]++;
+    els.quizActive.classList.add("hidden");
+    els.roundComplete.classList.remove("hidden");
+    els.finalScore.textContent = roundScore[skill];
+
+    var msg;
+    if(roundScore[skill] >= 9) msg = "Outstanding! 🌟";
+    else if(roundScore[skill] >= 7) msg = "Great job!";
+    else if(roundScore[skill] >= 4) msg = "Nice effort - keep practicing!";
+    else msg = "Good try - let's go again!";
+    els.roundMsg.textContent = msg;
+
+    if(!badgeEarned[skill]){
       badgeEarned[skill] = true;
-      var els = cardEls(skill);
       els.badgeNote.textContent = "🌟 Badge earned!";
       var icon = document.querySelector('.badge-icon[data-skill="' + skill + '"]');
       if(icon) icon.classList.add("earned");
@@ -582,33 +824,37 @@
     }
   }
 
+  function startNewRound(skill){
+    var els = cardEls(skill);
+    roundPos[skill] = 0;
+    roundScore[skill] = 0;
+    els.roundComplete.classList.add("hidden");
+    els.quizActive.classList.remove("hidden");
+    loadRoundQuestion(skill);
+  }
+
   function updateOverallProgress(){
     var count = Object.keys(badgeEarned).filter(function(k){ return badgeEarned[k]; }).length;
     document.getElementById("badge-count").textContent = count;
-    if(count === 4){
+    if(count === 5){
       document.getElementById("congrats-banner").classList.remove("hidden");
-      document.getElementById("congrats-banner").scrollIntoView({ behavior: "smooth", block: "center" });
+      document.getElementById("congrats-banner").scrollIntoView({ behavior:"smooth", block:"center" });
     }
   }
 
-  ["logical","computational","problem","analytical"].forEach(function(skill){
+  SKILLS.forEach(function(skill){
     var els = cardEls(skill);
     els.nextBtn.addEventListener("click", function(){
-      pointer[skill]++;
-      loadQuestion(skill);
+      if(roundPos[skill] < 9){
+        roundPos[skill]++;
+        loadRoundQuestion(skill);
+      } else {
+        finishRound(skill);
+      }
     });
-    loadQuestion(skill);
+    els.playAgainBtn.addEventListener("click", function(){ startNewRound(skill); });
+    loadRoundQuestion(skill);
   });
-
-  // ---------- Name personalization ----------
-  var nameInput = document.getElementById("child-name-input");
-  var nameTargets = document.querySelectorAll(".child-name");
-  function applyName(){
-    var val = nameInput.value.trim() || "Akky";
-    nameTargets.forEach(function(el){ el.textContent = val; });
-  }
-  nameInput.addEventListener("input", applyName);
-  applyName();
 
   // ---------- Skill tag filter ----------
   var activeFilter = null;
@@ -634,6 +880,27 @@
         if(targetCard) targetCard.scrollIntoView({ behavior:"smooth", block:"start" });
       }
     });
+  });
+
+  // ---------- Name gate ----------
+  var nameGate = document.getElementById("name-gate");
+  var gateInput = document.getElementById("gate-name-input");
+  var gateBtn = document.getElementById("gate-start-btn");
+  var nameTargets = document.querySelectorAll(".child-name");
+
+  function applyName(name){
+    var val = (name || "").trim() || "Champion";
+    nameTargets.forEach(function(el){ el.textContent = val; });
+  }
+
+  function submitGate(){
+    applyName(gateInput.value);
+    nameGate.classList.add("hidden");
+  }
+
+  gateBtn.addEventListener("click", submitGate);
+  gateInput.addEventListener("keydown", function(e){
+    if(e.key === "Enter") submitGate();
   });
 </script>
 </body>
