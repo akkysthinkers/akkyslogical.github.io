@@ -46,7 +46,19 @@
   }
   #child-name-input:focus-visible{ outline:3px solid var(--teal); outline-offset:2px; }
   .skills-list{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; font-size:13px; color:var(--ink-dim); }
-  .skills-list span{ background:var(--bg-soft); padding:7px 14px; border-radius:999px; }
+  .skill-tag{
+    font-family:'Nunito',sans-serif; background:var(--bg-soft); color:var(--ink-dim); border:2px solid transparent;
+    padding:7px 14px; border-radius:999px; font-size:13px; font-weight:700; cursor:pointer;
+    transition:transform .15s ease, background .15s ease, color .15s ease;
+  }
+  .skill-tag:hover{ transform:translateY(-2px); }
+  .skill-tag:focus-visible{ outline:3px solid var(--teal); outline-offset:2px; }
+  .skill-tag.active.skill-tag--logical{ background:var(--coral); color:#1c1c1c; border-color:var(--coral); }
+  .skill-tag.active.skill-tag--computational{ background:var(--gold); color:#1c1c1c; border-color:var(--gold); }
+  .skill-tag.active.skill-tag--problem{ background:var(--teal); color:#1c1c1c; border-color:var(--teal); }
+  .skill-tag.active.skill-tag--analytical{ background:var(--violet); color:#1c1c1c; border-color:var(--violet); }
+  .filter-hint{ font-size:12px; color:var(--ink-dim); opacity:.65; margin:12px 0 0; }
+  .card.card-hidden{ display:none; }
 
   /* ---------- Cards ---------- */
   main.cards-grid{
@@ -135,11 +147,12 @@
       <input id="child-name-input" type="text" value="Akky" maxlength="24">
     </div>
     <div class="skills-list">
-      <span>🔺 Logical Reasoning</span>
-      <span>💻 Computational Thinking</span>
-      <span>🧠 Problem Solving</span>
-      <span>📊 Analytical Thinking</span>
+      <button type="button" class="skill-tag skill-tag--logical" data-jump="logical">🔺 Logical Reasoning</button>
+      <button type="button" class="skill-tag skill-tag--computational" data-jump="computational">💻 Computational Thinking</button>
+      <button type="button" class="skill-tag skill-tag--problem" data-jump="problem">🧠 Problem Solving</button>
+      <button type="button" class="skill-tag skill-tag--analytical" data-jump="analytical">📊 Analytical Thinking</button>
     </div>
+    <p class="filter-hint">Tap a skill to jump straight to it — tap it again to see all four.</p>
   </section>
 
   <main class="cards-grid">
@@ -596,6 +609,32 @@
   }
   nameInput.addEventListener("input", applyName);
   applyName();
+
+  // ---------- Skill tag filter ----------
+  var activeFilter = null;
+  var skillTags = document.querySelectorAll(".skill-tag");
+  skillTags.forEach(function(tag){
+    tag.addEventListener("click", function(){
+      var skill = tag.dataset.jump;
+      var allCards = document.querySelectorAll(".card");
+      if(activeFilter === skill){
+        activeFilter = null;
+        allCards.forEach(function(c){ c.classList.remove("card-hidden"); });
+        skillTags.forEach(function(t){ t.classList.remove("active"); });
+      } else {
+        activeFilter = skill;
+        allCards.forEach(function(c){
+          if(c.dataset.skill === skill) c.classList.remove("card-hidden");
+          else c.classList.add("card-hidden");
+        });
+        skillTags.forEach(function(t){
+          if(t === tag) t.classList.add("active"); else t.classList.remove("active");
+        });
+        var targetCard = document.querySelector('.card[data-skill="' + skill + '"]');
+        if(targetCard) targetCard.scrollIntoView({ behavior:"smooth", block:"start" });
+      }
+    });
+  });
 </script>
 </body>
 </html>
